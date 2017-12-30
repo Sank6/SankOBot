@@ -287,9 +287,20 @@ async def on_message(message):
                 url = info.default_avatar_url
             else:
                 url = info.avatar_url
-            create_img.get_picture(info.name, level, total_xp, _credits, _time, choice, xp, url)
-            await client.send_file(message.channel,
-                                   './backgrounds/real/result.png')
+            em = discord.Embed(title=title, description=content, colour=0x1cffe2)
+            if info.avatar_url == '':
+                picture_of_user = info.default_avatar_url
+            else:
+                picture_of_user = info.avatar_url
+            em.set_author(name=info, icon_url=picture_of_user)
+            em.set_thumbnail(url=picture_of_user)
+            server_details = '__Server: ' + str(info.server) + '__'
+            content2 = 'Joined on: ' + str(info.joined_at.strftime("%d/%m/%Y at %H:%M"))
+            em.add_field(name="__User's Bot Related Info__", value=content3)
+            em.add_field(name=server_details, value=content2)
+            date = str(datetime.utcnow().strftime("Sent on %d/%m/%Y at %H:%M"))
+            em.set_footer(text=date, icon_url=client.user.avatar_url)
+            await client.send_message(message.channel, embed=em)
 
 
         # AI mode NO "d"
@@ -682,7 +693,6 @@ async def on_message(message):
                     url_list.append(url)
 
                 ran_num = random.randint(0, len(url_list))
-                msg = url_list[ran_num]
                 await client.send_message(message.channel, msg)
 
             except:
