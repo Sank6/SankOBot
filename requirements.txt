@@ -1,0 +1,6 @@
+discord.py
+praw
+pydictionary
+pyfiglet
+Pillow
+google-api-python-client
