@@ -17,7 +17,7 @@ from googleapiclient.discovery import build
 
 
 # TOKEN HERE!
-my_token = ""
+my_token = os.environ.get('TOKEN')  # replace with your token
 your_user_id = ""
 
 google_developer_key = ""
