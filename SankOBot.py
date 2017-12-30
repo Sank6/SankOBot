@@ -618,46 +618,42 @@ async def on_message(message):
 
 
 
-            # help
-        HelpMsg1 = '```fix\n Command           : What It Does                                               \n-------------------:------------------------------------------------------------\n %ping *           : pong                                                       \n %help *           : Shows Help Page                                            \n %rand [x] [y] *   : Finds a random number between [x] and [y]                  \n %invite *         : Invite Link                                                \n %say *            : Control Me! Tell me what to say!                           \n %clear [number] * : clear [number] of messages from that channel!              \n %clear all        : Clears all messages in channel!                            \n %ask[question] *  : Asks Frazer a Question!                                    \n %spam [x] *       : Spams a random message [x] number of times                 \n %time [ 0 or 1 ]  : Changes time mode for `%spam` and `%clear`. (Fast or Even) \n %aicheck          : Checks if AI is activated                                  \n %activate         : Activates AI bot                                           \n %deactivate       : De-activates AI                                            \n %clear [x]        : Clears [x] messages from that channel                      \n %clear all        : Clears all messages in the channel                         \n %stop             : Restarts SankOBot                                          \n %reddit [x]       : Shows a reddit post (one of top 10) from the subreddit [x] \n %meme             : Shows a meme                                               \n %cmeme            : Shows a constantly changing meme                           \n %prequelmeme      : Shows a prequelmeme                                        \n %cprequelmeme     : Shows a constantly changing prequelmeme ```'
-
-        HelpMsg3 = '''```fix
- Command             : What It Does                                    
----------------------:-------------------------------------------------
- %newgame            : Starts a new chessgame                          
- %endgame            : Resign the current game                         
- %move [x] [y]       : Move the piece at [x] to [y]                    
- %movelist           : Suggests a move to you, if it is your turn      
- %data               : Checks whether either player is in check        
- %ascii [x]          : Prints [x] in ASCII Art                         
- %info [tag someone] : Retrieves information about the user you tagged 
- %update             : Shows newly added and upcoming features    
- %pun                : Shows a pun
- %define [x]         : Defines the WORD (Not Phrase) [x]      
- %img [x]            : Searches for [x] in google images
- %email [x] [y]      : Emails [x], [y] number of times 
-
- %credits             : Collect daily credits
- %buy                : Shows a list of backgrounds to buy
- %buy [x]            : Buy background [x]
- %choose [x]         : Choose background [x] for yuor info page```'''
-
-        HelpMsg2 = '\n\n`*` <-- Add `d` to the end of the command (word starting with `%`) to delete your message\n\nThe link to the help server has been Direct Messaged to you.\n\nAdd SankOBot Music now: https://discordapp.com/oauth2/authorize?client_id=370274598559678467&scope=bot&permissions=267471873\n\nMade By Guru Ankrad'
+        embed = discord.Embed(title=" ", description=" ", color=0xfaeb30)
+        embed.add_field(name=" %ping", value="pong", inline=False)
+        embed.add_field(name="%help", value="Shows Help Page", inline=False)
+        embed.add_field(name="%rand [x] [y]", value="Finds a random number between [x] and [y]", inline=False)
+        embed.add_field(name="%invite", value="Invite Link", inline=False)
+        embed.add_field(name="%say", value="Control Me! Tell me what to say!", inline=False)
+        embed.add_field(name="%clear [number] ", value="Clear [number] of messages", inline=False)
+        embed.add_field(name="%clear all", value="Clears all messages", inline=False)
+        embed.add_field(name="%ask[question]", value="Asks Frazer a Question! ", inline=False)
+        embed.add_field(name="%spam [x]", value="Spams a random message [x] number of times", inline=False)
+        embed.add_field(name="%time [ 0 or 1 ]", value="Changes time mode for `%spam` and `%clear`. (Fast or Even)",
+                        inline=False)
+        embed.add_field(name="%reddit [x]", value="Shows a reddit post (one of top 10) from [x]", inline=False)
+        embed.add_field(name="%meme", value="Shows a meme", inline=False)
+        embed.add_field(name="%cmeme", value="Shows a constantly changing meme", inline=False)
+        embed.add_field(name="%ascii [x]", value="Prints [x] in ASCII Art", inline=False)
+        embed.add_field(name="%info [tag someone]", value="Retrieves information about the user you tagged",
+                        inline=False)
+        embed.add_field(name="%pun", value="Shows a pun", inline=False)
+        embed.add_field(name="%define [x]", value="Defines the WORD (Not Phrase) [x]", inline=False)
+        embed.add_field(name="%email [x] [y]", value="Sends [y] emails to [x]", inline=False)
+        embed.add_field(name="%credits", value="Collect daily credits", inline=False)
+        embed.add_field(name="%buy", value="Shows a list of backgrounds to buy", inline=False)
+        embed.add_field(name="%buy [x]", value="Buy background [x]", inline=False)
+        embed.add_field(name="%choose [x]", value="Choose background [x] for your info page", inline=False)
+        embed.add_field(name="Join The SankOBot help server!", value="https://discord.gg/GTFAzCy", inline=False)
         if message.content.startswith('%helpd'):
-            await client.send_message(message.channel, HelpMsg1)
-            await client.send_message(message.channel, HelpMsg3)
-            await client.send_message(message.channel, HelpMsg2)
             await client.delete_message(message)
+            await client.send_message(message.author, embed=embed)
+            await client.send_message(message.channel, 'A list of commands has been sent to you.')
         elif message.content.startswith('%help'):
-            await client.send_message(message.channel, HelpMsg1)
-            await client.send_message(message.channel, HelpMsg3)
-            await client.send_message(message.channel, HelpMsg2)
-
-        if client.user in message.mentions:
-            if 'help' in message.content:
-                await client.send_message(message.channel, HelpMsg1)
-                await client.send_message(message.channel, HelpMsg3)
-                await client.send_message(message.channel, HelpMsg2)
+            await client.send_message(message.author, embed=embed)
+            await client.send_message(message.channel, 'A list of commands has been sent to you.')
+        if client.user in message.mentions and 'help' in message.content:
+            await client.send_message(message.author, embed=embed)
+            await client.send_message(message.channel, 'A list of commands has been sent to you.')
         if message.content.startswith('%reddit'):
             url_list = []
             await client.send_typing(message.channel)
