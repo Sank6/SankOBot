@@ -4,7 +4,7 @@ from datetime import datetime
 from discord import ChannelType
 from pyfiglet import figlet_format
 from Levels import manage
-from Levels import servers
+from Levels import servers_s as servers
 from backgrounds.Real import create_img
 from googleapiclient.discovery import build
 
