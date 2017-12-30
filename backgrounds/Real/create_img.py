@@ -6,15 +6,15 @@ from io import BytesIO
 
 
 def get_picture(name, level, messages, credits, time, choice, xp, url):
-    font_name = "./main.ttf"
-    title_font = "./title.ttf"
-    foreground = Image.open("./bg.png").convert("RGBA")
-    background = Image.open("/" + str(choice) + ".png").convert("RGBA")
+    font_name = "main.ttf"
+    title_font = "title.ttf"
+    foreground = Image.open("bg.png").convert("RGBA")
+    background = Image.open(str(choice) + ".png").convert("RGBA")
 
     together = Image.new('RGBA', (500, 500), (0, 0, 0, 0))
     together.paste(background, (0, 0))
     together.paste(foreground, (0, 0), mask=foreground)
-    together.save("./together.png", format="png")
+    together.save("together.png", format="png")
 
     # xp
     if int(xp) == 0:
@@ -24,7 +24,7 @@ def get_picture(name, level, messages, credits, time, choice, xp, url):
     rectangle = Image.new('RGBA', (500, 500), (0, 0, 0, 0))
     rectangle_ = ImageDraw.Draw(rectangle)
     rectangle_.rectangle([86, 225, x, 287], fill=(100, 100, 100, 255), outline=None)
-    rectangle.save("./rect.png", format="png")
+    rectangle.save("rect.png", format="png")
 
     foreground = Image.open("./rect.png").convert("RGBA")
     background = Image.open("./together.png").convert("RGBA")
@@ -32,12 +32,12 @@ def get_picture(name, level, messages, credits, time, choice, xp, url):
     together2 = Image.new('RGBA', (500, 500), (0, 0, 0, 0))
     together2.paste(background, (0, 0))
     together2.paste(foreground, (0, 0), mask=foreground)
-    together2.save("./together2.png", format="png")
+    together2.save("together2.png", format="png")
 
     # add level background
 
-    foreground = Image.open("./level.png").convert("RGBA")
-    background = Image.open("./together2.png").convert("RGBA")
+    foreground = Image.open("level.png").convert("RGBA")
+    background = Image.open("together2.png").convert("RGBA")
 
     together3 = Image.new('RGBA', (500, 500), (0, 0, 0, 0))
     together3.paste(background, (0, 0))
@@ -54,14 +54,14 @@ def get_picture(name, level, messages, credits, time, choice, xp, url):
     new_im = Image.new("RGB", new_size)
     new_im.paste(foreground, (int((new_size[0] - old_size[0]) / 2), int((new_size[1] - old_size[1]) / 2)))
 
-    bg = Image.open("./together3.png").convert("RGBA")
+    bg = Image.open("together3.png").convert("RGBA")
 
     bg.paste(new_im , (40, 40))
-    bg.save("./together3.png")
+    bg.save("together3.png")
 
     #
     # add text
-    result = Image.open("./together3.png")
+    result = Image.open("together3.png")
     draw = ImageDraw.Draw(result)
     text = name
     if len(text) < 15:
@@ -96,4 +96,4 @@ def get_picture(name, level, messages, credits, time, choice, xp, url):
     font = ImageFont.truetype(font_name, font_size)
     draw.text((40, 420), text, (0, 0, 0), font=font)
 
-    result.save("./result.png", format="png")
+    result.save("result.png", format="png")
