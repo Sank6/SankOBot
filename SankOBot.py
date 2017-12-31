@@ -11,14 +11,17 @@ from googleapiclient.discovery import build
 
 # TOKEN HERE!
 my_token = os.environ.get('TOKEN')  # replace with your token
-your_user_id = ""
+your_user_id = os.environ.get('USERID')
 
-google_developer_key = ""
-google_cx = ""
+google_developer_key = os.environ.get('GDEVKEY')
+google_cx = os.environ.get('GOOGLECX')
 
-reddit_client_id = ""
-reddit_client_secret = ""
-reddit_user_agent = ""
+reddit_client_id = os.environ.get('REDDITID')
+reddit_client_secret = os.environ.get('REDDITSECRET')
+reddit_user_agent = os.environ.get('REDDITAGENT')
+
+email_address = os.environ.get('EMAILADDRESS')
+email_password = os.environ.get('EMAIlPSW')
 
 
 def image_search(query):
