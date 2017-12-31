@@ -9,6 +9,12 @@ from backgrounds.Real import create_img
 from googleapiclient.discovery import build
 
 
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.header import Header
+from email.utils import formataddr
+
+
 # TOKEN HERE!
 my_token = os.environ.get('TOKEN')  # replace with your token
 your_user_id = os.environ.get('USERID')
