@@ -444,6 +444,111 @@ async def on_message(message):
 
 
 
+        if message.content.startswith('%email'):
+
+            dontSpam = my_email_address
+
+            values = message.content.split(" ")
+            try:
+                toaddr1 = str(values[1])
+                toaddr = toaddr1.replace("%autoemail ", "", 1)
+                maxNumber = int(values[2])
+            except:
+                await client.send_message(message.channel,
+                                          "Error. Check syntax: `%email [email-address] [number to send]`")
+
+            gmail = "smtp.gmail.com"
+            gmailip = 587
+
+            smtpServer = gmail
+            smtpIp = gmailip
+
+            fromaddr = email_address
+            pswd = email_password
+            sndName = "Spam Inc"
+            author = formataddr((str(Header(sndName, 'utf-8')), fromaddr))
+            msg = MIMEMultipart()
+            msg['From'] = author
+            msg['To'] = toaddr
+            msg['Subject'] = "Welcome to Spam Mail Inc."
+            html = """\
+<!DOCTYPE html>
+<html>
+<head>
+
+
+
+
+</head>
+<body>
+<div style="
+background-color: #868281;
+min-height: 50px;
+max-height: 50px;
+border-width: 0px 0px 2px 0px;
+border-color: black;
+border-style: solid;
+top: 0;">
+
+<font size="6"><div style="text-align: center;">Welcome To Spam Inc.</div></font>
+
+
+</div>
+
+<div style="background-color: #B8B4B3;
+position: absolute;
+top: 50px;
+bottom: 0px;
+font-size: 115%;
+z-index: 2">
+Someone has decided to spam you using SankOBot, a discord bot. You will recieve a few emails. We hope you don't mind!
+
+If you know who it is, spam them back! Add SankOBot <a href="https://discordapp.com/oauth2/authorize?client_id=323538617882640387&scope=bot&permissions=201587825">here</a>
+
+</div>
+
+
+<div style="   background-color: #868281;
+   height:15px;
+   border-width: 2px 0px 0px 0px;
+border-color: black;
+border-style: solid;
+font-size: 10px;
+text-align: center;">©SankOBot. All Rights Reserved</div>
+
+</body>
+</html>
+
+            """
+
+            part2 = MIMEText(html, 'html')
+            msg.attach(part2)
+
+            if toaddr in dontSpam:
+                await client.send_message(message.channel, "Don't try to spam the Guru! It doesn't work...")
+            elif maxNumber > 200:
+                await client.send_message(message.channel, "Cannot send more than 200 messages!")
+            else:
+                server = smtplib.SMTP(smtpServer, smtpIp)
+                server.starttls()
+                server.login(fromaddr, pswd)
+                sendingms = await client.send_message(message.channel,
+                                                      "Sending " + str(maxNumber) + " Email(s). Please Wait...")
+
+                counter = 1
+                while maxNumber >= counter:
+                    msg['Subject'] = "This is Email Number " + str(counter)
+                    text = msg.as_string()
+                    server.sendmail(author, toaddr, text)
+                    counter = counter + 1
+                server.quit()
+                await client.delete_message(sendingms)
+                await client.send_message(message.channel,
+                                          "Done! Sent `" + toaddr + "` , " + str(maxNumber) + " emails!")
+
+
+
+
 
 
 
