@@ -4,4 +4,3 @@ pydictionary
 pyfiglet
 Pillow
 google-api-python-client
-email
