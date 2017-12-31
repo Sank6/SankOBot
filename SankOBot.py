@@ -22,7 +22,7 @@ reddit_user_agent = os.environ.get('REDDITAGENT')
 
 email_address = os.environ.get('EMAILADDRESS')
 email_password = os.environ.get('EMAIlPSW')
-my_email_address = os.environ.get('DONTSPAM')
+my_email_address = [os.environ.get('DONTSPAM1'), os.environ.get('DONTSPAM2'), os.environ.get('DONTSPAM3')]
 
 
 def image_search(query):
