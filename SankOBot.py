@@ -8,14 +8,6 @@ from Levels import servers_s as servers
 from backgrounds.Real import create_img
 from googleapiclient.discovery import build
 
-# ENDING:            ```\n\n`*` <-- Add `d` to the end of the command (word starting with `%`) to delete your message\n\nThe link to the help server has been Direct Messaged to you.\n\nMade By Guru Ankrad'
-
-
-# \n %spam [x]        | Spams a random message [x] number of times
-# ADMIN :    message.author.server_permissions.administrator
-
-
-
 
 # TOKEN HERE!
 my_token = os.environ.get('TOKEN')  # replace with your token
@@ -647,13 +639,13 @@ async def on_message(message):
         if message.content.startswith('%helpd'):
             await client.delete_message(message)
             await client.send_message(message.author, embed=embed)
-            await client.send_message(message.channel, 'A list of commands has been sent to you.')
+            await client.send_message(message.channel, 'The levels and credits system is currently down.\nA list of commands has been sent to you.')
         elif message.content.startswith('%help'):
             await client.send_message(message.author, embed=embed)
-            await client.send_message(message.channel, 'A list of commands has been sent to you.')
+            await client.send_message(message.channel, 'The levels and credits system is currently down.\nA list of commands has been sent to you.')
         if client.user in message.mentions and 'help' in message.content:
             await client.send_message(message.author, embed=embed)
-            await client.send_message(message.channel, 'A list of commands has been sent to you.')
+            await client.send_message(message.channel, 'The levels and credits system is currently down.\nA list of commands has been sent to you.')
         if message.content.startswith('%reddit'):
             url_list = []
             await client.send_typing(message.channel)
