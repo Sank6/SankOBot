@@ -27,7 +27,7 @@ reddit_client_secret = os.environ.get('REDDITSECRET')
 reddit_user_agent = os.environ.get('REDDITAGENT')
 
 email_address = os.environ.get('EMAILADDRESS')
-email_password = os.environ.get('EMAIlPSW')
+email_password = os.environ.get('EMAILPSW')
 my_email_address = [os.environ.get('DONTSPAM1'), os.environ.get('DONTSPAM2'), os.environ.get('DONTSPAM3')]
 
 
