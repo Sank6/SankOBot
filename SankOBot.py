@@ -264,6 +264,7 @@ async def on_message(message):
             if info.bot:
                 await client.send_message(message.channel, 'You cannot get info about a bot.')
                 return
+            content = ''
             if str(info.game) != 'None':
                 playing = str(info.game)
             else:
@@ -289,7 +290,7 @@ async def on_message(message):
                 url = info.default_avatar_url
             else:
                 url = info.avatar_url
-            em = discord.Embed(title=title, description=content, colour=0x1cffe2)
+            em = discord.Embed(title='', description=content, colour=0x1cffe2)
             if info.avatar_url == '':
                 picture_of_user = info.default_avatar_url
             else:
