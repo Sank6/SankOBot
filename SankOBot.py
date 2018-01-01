@@ -290,19 +290,19 @@ async def on_message(message):
                 url = info.default_avatar_url
             else:
                 url = info.avatar_url
-            em = discord.Embed(title='', description=content, colour=0x1cffe2)
+            # em = discord.Embed(title='', description=content, colour=0x1cffe2)
             if info.avatar_url == '':
                 picture_of_user = info.default_avatar_url
             else:
                 picture_of_user = info.avatar_url
-            em.set_author(name=info, icon_url=picture_of_user)
-            em.set_thumbnail(url=picture_of_user)
+            # em.set_author(name=info, icon_url=picture_of_user)
+            # em.set_thumbnail(url=picture_of_user)
             server_details = '__Server: ' + str(info.server) + '__'
             content2 = 'Joined on: ' + str(info.joined_at.strftime("%d/%m/%Y at %H:%M"))
-            em.add_field(name="__User's Bot Related Info__", value=content3)
-            em.add_field(name=server_details, value=content2)
+            # em.add_field(name="__User's Bot Related Info__", value=content3)
+            # em.add_field(name=server_details, value=content2)
             date = str(datetime.utcnow().strftime("Sent on %d/%m/%Y at %H:%M"))
-            em.set_footer(text=date, icon_url=client.user.avatar_url)
+            # em.set_footer(text=date, icon_url=client.user.avatar_url)
             embed=discord.Embed(title="Info")
             embed.add_field(name="Level", value=level, inline=False)
             embed.add_field(name="Credits", value=_credits, inline=False)
