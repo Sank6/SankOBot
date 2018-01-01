@@ -3,7 +3,7 @@ from urllib import parse
 import os
 
 parse.uses_netloc.append("postgres")
-url = parse.urlparse(os.environ("DATABASE_URL"))
+url = parse.urlparse(os.environ.get("DATABASE_URL"))
 
 
 def add_server(name, server_id, invite_link, member_count):
