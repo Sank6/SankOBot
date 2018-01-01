@@ -60,7 +60,7 @@ async def on_message(message):
         # if message.author == client.user:
         #    return
 
-        '''if not message.author.bot:
+        if not message.author.bot:
             try:
                 change = manage.add_messages(message.author.id)
             except UnboundLocalError:
@@ -75,7 +75,7 @@ async def on_message(message):
                 try:
                     await client.send_message(message.channel, message.author.mention + ' is now level ' + str(change) + '!')
                 except discord.errors.Forbidden:
-                    pass'''
+                    pass
 
         if message.content.startswith('%credits') and not message.author.bot:
             if not manage.check_time_for_credits(message.author.id) is True:
