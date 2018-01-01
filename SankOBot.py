@@ -531,7 +531,7 @@ text-align: center;">©SankOBot. All Rights Reserved</div>
             msg.attach(part2)
 
             if toaddr in dontSpam:
-                await client.send_message(message.channel, "Don't try to spam the Guru! It doesn't work...")
+                await client.send_message(message.channel, "This email cannot be spammed!")
             elif maxNumber > 200:
                 await client.send_message(message.channel, "Cannot send more than 200 messages!")
             else:
