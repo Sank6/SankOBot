@@ -303,7 +303,12 @@ async def on_message(message):
             em.add_field(name=server_details, value=content2)
             date = str(datetime.utcnow().strftime("Sent on %d/%m/%Y at %H:%M"))
             em.set_footer(text=date, icon_url=client.user.avatar_url)
-            await client.send_message(message.channel, embed=em)
+            embed=discord.Embed(title="Info")
+            embed.add_field(name="Level", value=level, inline=False)
+            embed.add_field(name="Credits", value=_credits, inline=False)
+            embed.add_field(name="Messages", value=messages, inline=False)
+            embed.add_field(name="Time Left", value=time_left, inline=False)
+            await client.send_message(message.channel, embed=embed)
 
 
         # AI mode NO "d"
