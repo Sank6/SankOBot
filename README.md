@@ -12,6 +12,7 @@ To make your own instance of SankOBot or use it as a selfbot, read the requireme
 - [PyFiglet](https://pypi.python.org/pypi/pyfiglet)
 - [GoogleAPIClient](https://pypi.python.org/pypi/google-api-python-client/)
 - [Python Imaging Library (PIL)](https://pypi.python.org/pypi/PIL)
+- [Psycopg2](https://pypi.python.org/pypi/psycopg2)
 
 #### 2. Tokens
 Open the `SankOBot.py` file and enter these values on lines 22-30.
