@@ -61,7 +61,7 @@ def update_user(user_id):
             id_ = row[0]
         else:
             pass
-    cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (0, int(id_)))
+    cursor.execute("UPDATE USERS set subscribed = %s where ID = %s", (0, int(id_)))
     conn.commit()
     cursor.close()
     conn.close()
@@ -127,7 +127,7 @@ def add_messages(user_id):
         else:
             pass
     new_msgs = str(int(old_msgs) + 1)
-    cursor.execute("UPDATE USERS set Messages = ? where ID = ?", (str(new_msgs), str(id_)))
+    cursor.execute("UPDATE USERS set Messages = %s where ID = %s", (str(new_msgs), str(id_)))
     conn.commit()
     cursor.close()
     conn.close()
@@ -156,8 +156,8 @@ def add_credits(user_id, amount):
     date_var = str(now.timestamp())
     date_var = date_var.split('.')
     date_var = int(date_var[0])
-    cursor.execute("UPDATE USERS set Credits = ? where ID = ?", (str(new_creds), str(id_)))
-    cursor.execute("UPDATE USERS set DateOfLastCredit = ? where ID = ?", (str(date_var), str(id_)))
+    cursor.execute("UPDATE USERS set Credits = %s where ID = %s", (str(new_creds), str(id_)))
+    cursor.execute("UPDATE USERS set DateOfLastCredit = %s where ID = %s", (str(date_var), str(id_)))
     conn.commit()
     cursor.close()
     conn.close()
@@ -251,7 +251,7 @@ def update_user_name(user_id, new_name):
         else:
             pass
     try:
-        cursor.execute("UPDATE USERS set Name = ? where ID = ? ", (new_name, str(id_)))
+        cursor.execute("UPDATE USERS set Name = %s where ID = %s ", (new_name, str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
@@ -441,34 +441,34 @@ def check_level_up(user_id):
             pass
     change = False
     if messages >= 10 and level < 1:
-        cursor.execute("UPDATE USERS set Level = 1 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 1 where ID = %s", (str(id_),))
         change = 1
     if messages >= 50 and level < 2:
-        cursor.execute("UPDATE USERS set Level = 2 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 2 where ID = %s", (str(id_),))
         change = 2
     if messages >= 100 and level < 3:
-        cursor.execute("UPDATE USERS set Level = 3 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 3 where ID = %s", (str(id_),))
         change = 3
     if messages >= 200 and level < 4:
-        cursor.execute("UPDATE USERS set Level = 4 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 4 where ID = %s", (str(id_),))
         change = 4
     if messages >= 500 and level < 5:
-        cursor.execute("UPDATE USERS set Level = 5 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 5 where ID = %s", (str(id_),))
         change = 5
     if messages >= 1000 and level < 6:
-        cursor.execute("UPDATE USERS set Level = 6 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 6 where ID = %s", (str(id_),))
         change = 6
     if messages >= 2000 and level < 7:
-        cursor.execute("UPDATE USERS set Level = 7 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 7 where ID = %s", (str(id_),))
         change = 7
     if messages >= 5000 and level < 8:
-        cursor.execute("UPDATE USERS set Level = 8 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 8 where ID = %s", (str(id_),))
         change = 8
     if messages >= 10000 and level < 9:
-        cursor.execute("UPDATE USERS set Level = 9 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 9 where ID = %s", (str(id_),))
         change = 9
     if messages >= 100000 and level < 10:
-        cursor.execute("UPDATE USERS set Level = 10 where ID = ?", (str(id_),))
+        cursor.execute("UPDATE USERS set Level = 10 where ID = %s", (str(id_),))
         change = 10
     conn.commit()
     cursor.close()
@@ -499,9 +499,9 @@ def buy_background(user_id, code):
             new_credits = str(int(_credits) - 2000)
             bought = str(bought + ' 1')
             print(bought + ' ' + str(id_))
-            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
-            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
-            cursor.execute("UPDATE USERS set choice = 1 where ID = ?", (str(id_)))
+            cursor.execute("UPDATE USERS set bought = %s where ID = %s", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = %s where ID = %s", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 1 where ID = %s", (str(id_)))
             conn.commit()
             cursor.close()
             conn.close()
@@ -511,9 +511,9 @@ def buy_background(user_id, code):
         if _credits >= 3000:
             new_credits = str(int(_credits) - 3000)
             bought = str(bought + ' 2')
-            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
-            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
-            cursor.execute("UPDATE USERS set choice = 2 where ID = ?", (str(id_)))
+            cursor.execute("UPDATE USERS set bought = %s where ID = %s", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = %s where ID = %s", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 2 where ID = %s", (str(id_)))
             conn.commit()
             cursor.close()
             conn.close()
@@ -523,9 +523,9 @@ def buy_background(user_id, code):
         if _credits >= 3500:
             new_credits = str(int(_credits) - 3500)
             bought = str(bought + ' 3')
-            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
-            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
-            cursor.execute("UPDATE USERS set choice = 3 where ID = ?", (str(id_)))
+            cursor.execute("UPDATE USERS set bought = %s where ID = %s", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = %s where ID = %s", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 3 where ID = %s", (str(id_)))
             conn.commit()
             cursor.close()
             conn.close()
@@ -535,9 +535,9 @@ def buy_background(user_id, code):
         if _credits >= 4000:
             new_credits = str(int(_credits) - 4000)
             bought = str(bought + ' 4')
-            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
-            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
-            cursor.execute("UPDATE USERS set choice = 4 where ID = ?", (str(id_)))
+            cursor.execute("UPDATE USERS set bought = %s where ID = %s", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = %s where ID = %s", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 4 where ID = %s", (str(id_)))
             conn.commit()
             cursor.close()
             conn.close()
@@ -547,9 +547,9 @@ def buy_background(user_id, code):
         if _credits >= 5000:
             new_credits = str(int(_credits) - 5000)
             bought = str(bought + ' 5')
-            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
-            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
-            cursor.execute("UPDATE USERS set choice = 5 where ID = ?", (str(id_)))
+            cursor.execute("UPDATE USERS set bought = %s where ID = %s", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = %s where ID = %s", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 5 where ID = %s", (str(id_)))
             conn.commit()
             cursor.close()
             conn.close()
@@ -597,7 +597,7 @@ def set_choice(user_id, choice):
                 id_ = row[0]
             else:
                 pass
-        cursor.execute("UPDATE USERS set Choice = ? where ID = ?", (str(choice), str(id_)))
+        cursor.execute("UPDATE USERS set Choice = %s where ID = %s", (str(choice), str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
@@ -623,13 +623,13 @@ def unsubscribe(user_id):
         else:
             pass
     if subscribed != 0 or subscribed != 1:
-        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(1), str(id_)))
+        cursor.execute("UPDATE USERS set subscribed = %s where ID = %s", (str(1), str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
         return True
     elif subscribed == 0:
-        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(1), str(id_)))
+        cursor.execute("UPDATE USERS set subscribed = %s where ID = %s", (str(1), str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
@@ -637,7 +637,7 @@ def unsubscribe(user_id):
     elif subscribed == 1:
         return False
     else:
-        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(1), str(id_)))
+        cursor.execute("UPDATE USERS set subscribed = %s where ID = %s", (str(1), str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
@@ -661,13 +661,13 @@ def subscribe(user_id):
         else:
             pass
     if subscribed != 0 or subscribed != 1:
-        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(0), str(id_)))
+        cursor.execute("UPDATE USERS set subscribed = %s where ID = %s", (str(0), str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
         return True
     elif subscribed == 0:
-        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(0), str(id_)))
+        cursor.execute("UPDATE USERS set subscribed = %s where ID = %s", (str(0), str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
@@ -675,7 +675,7 @@ def subscribe(user_id):
     elif subscribed == 1:
         return False
     else:
-        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(0), str(id_)))
+        cursor.execute("UPDATE USERS set subscribed = %s where ID = %s", (str(0), str(id_)))
         conn.commit()
         cursor.close()
         conn.close()
