@@ -1,12 +1,24 @@
-import sqlite3
+import psycopg2
+from urllib import parse
+import os
 from datetime import datetime
+
+parse.uses_netloc.append("postgres")
+url = parse.urlparse(os.environ.get("DATABASE_URL"))
 
 
 def add_user(name, user_id):
     list_of_ids = []
     list_of_user_ids = []
-    user = sqlite3.connect('users.db')
-    cursor = user.execute("SELECT ID, UserID from USER")
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID from USERS")
     for row in cursor:
         list_of_ids.append(row[0])
         list_of_user_ids.append(row[1])
@@ -19,40 +31,73 @@ def add_user(name, user_id):
 
 
 def add_user_tuple(values):
-    with sqlite3.connect('users.db') as db:
-        cursor = db.cursor()
-        sql = "INSERT INTO USER (ID, NAME, UserID, Messages, Credits, Choice, Level, DateOfLastCredit, bought, subscribed) values (?, ?, ?, 0, 0, 0, 0, 0, 0, 0)"
-        cursor.execute(sql, values)
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    sql = "INSERT INTO USERS (ID, NAME, UserID, Messages, Credits, Choice, Level, DateOfLastCredit, bought, subscribed) values (%s, %s, %s, 0, 0, 0, 0, 0, 0, 0)"
+    cursor.execute(sql, values)
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
 def update_user(user_id):
-    user = sqlite3.connect('users.db')
-    cursor = user.execute("SELECT ID, UserID from USER")
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
         else:
             pass
-    c = user.cursor()
-    c.execute("UPDATE USER set subscribed = ? where ID = ?", (0, int(id_)))
-    user.commit()
+    cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (0, int(id_)))
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
-def delete_data(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID from USER")
+def delete_data(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
         else:
             pass
-    user.execute("DELETE from USER where ID = " + str(id_) + ";")
-    user.commit()
+    cursor.execute("DELETE from USERS where ID = " + str(id_) + ";")
+    conn.commit()
+    cursor.close()
+    conn.close()
 
 
-def get_data(db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, Name, UserID, Messages, Credits, Choice, Level from USER")
+def get_data():
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, Name, UserID, Messages, Credits, Choice, Level from USERS")
     return_string = ''
     for row in cursor:
         return_string = return_string + "ID = " + str(row[0]) + "\n"
@@ -65,9 +110,16 @@ def get_data(db_name='users.db'):
     return return_string
 
 
-def add_messages(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, Messages from USER")
+def add_messages(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, Messages from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
@@ -75,15 +127,24 @@ def add_messages(user_id, db_name='users.db'):
         else:
             pass
     new_msgs = str(int(old_msgs) + 1)
-    user.execute("UPDATE USER set Messages = ? where ID = ?", (str(new_msgs), str(id_)))
-    user.commit()
+    cursor.execute("UPDATE USERS set Messages = ? where ID = ?", (str(new_msgs), str(id_)))
+    conn.commit()
+    cursor.close()
+    conn.close()
     change = check_level_up(user_id)
     return change
 
 
-def add_credits(user_id, amount, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, Credits from USER")
+def add_credits(user_id, amount):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, Credits from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
@@ -95,15 +156,24 @@ def add_credits(user_id, amount, db_name='users.db'):
     date_var = str(now.timestamp())
     date_var = date_var.split('.')
     date_var = int(date_var[0])
-    user.execute("UPDATE USER set Credits = ? where ID = ?", (str(new_creds), str(id_)))
-    user.execute("UPDATE USER set DateOfLastCredit = ? where ID = ?", (str(date_var), str(id_)))
-    user.commit()
+    cursor.execute("UPDATE USERS set Credits = ? where ID = ?", (str(new_creds), str(id_)))
+    cursor.execute("UPDATE USERS set DateOfLastCredit = ? where ID = ?", (str(date_var), str(id_)))
+    conn.commit()
+    cursor.close()
+    conn.close()
     return new_creds
 
 
-def check_time_for_credits(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, DateOfLastCredit, Credits from USER")
+def check_time_for_credits(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, DateOfLastCredit, Credits from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
@@ -121,9 +191,16 @@ def check_time_for_credits(user_id, db_name='users.db'):
         return True
 
 
-def time_till_credits(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, DateOfLastCredit from USER")
+def time_till_credits(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, DateOfLastCredit from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             last_date = row[2]
@@ -158,25 +235,41 @@ def time_till_credits(user_id, db_name='users.db'):
     return time
 
 
-def update_user_name(user_id, new_name, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, Name from USER")
+def update_user_name(user_id, new_name):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, Name from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
         else:
             pass
     try:
-        user.execute("UPDATE USER set Name = ? where ID = ? ", (new_name, str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set Name = ? where ID = ? ", (new_name, str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
     except UnboundLocalError:
         add_user(new_name, user_id)
         update_user_name(user_id, new_name)
 
 
-def get_level(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT UserID, Level from USER")
+def get_level(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT UserID, Level from USERS")
     for row in cursor:
         if str(row[0]) == str(user_id):
             level = row[1]
@@ -185,9 +278,16 @@ def get_level(user_id, db_name='users.db'):
     return int(level)
 
 
-def get_credits(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT UserID, Credits from USER")
+def get_credits(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT UserID, Credits from USERS")
     for row in cursor:
         if str(row[0]) == str(user_id):
             credits = row[1]
@@ -196,9 +296,16 @@ def get_credits(user_id, db_name='users.db'):
     return int(credits)
 
 
-def get_messages(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT UserID, Messages from USER")
+def get_messages(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT UserID, Messages from USERS")
     for row in cursor:
         if str(row[0]) == str(user_id):
             messages = row[1]
@@ -207,9 +314,16 @@ def get_messages(user_id, db_name='users.db'):
     return int(messages)
 
 
-def get_choice(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT UserID, Choice from USER")
+def get_choice(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT UserID, Choice from USERS")
     for row in cursor:
         if str(row[0]) == str(user_id):
             choice = row[1]
@@ -218,9 +332,16 @@ def get_choice(user_id, db_name='users.db'):
     return int(choice)
 
 
-def get_xp(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT UserID, Messages from USER")
+def get_xp(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT UserID, Messages from USERS")
     for row in cursor:
         if str(row[0]) == str(user_id):
             messages = row[1]
@@ -256,9 +377,16 @@ def get_xp(user_id, db_name='users.db'):
     return xp
 
 
-def get_total_xp(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT UserID, Messages from USER")
+def get_total_xp(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT UserID, Messages from USERS")
     for row in cursor:
         if str(row[0]) == str(user_id):
             messages = row[1]
@@ -294,9 +422,16 @@ def get_total_xp(user_id, db_name='users.db'):
     return xp
 
 
-def check_level_up(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, Level, Messages from USER")
+def check_level_up(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, Level, Messages from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
@@ -306,51 +441,51 @@ def check_level_up(user_id, db_name='users.db'):
             pass
     change = False
     if messages >= 10 and level < 1:
-        user.execute("UPDATE USER set Level = 1 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 1 where ID = ?", (str(id_),))
         change = 1
     if messages >= 50 and level < 2:
-        user.execute("UPDATE USER set Level = 2 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 2 where ID = ?", (str(id_),))
         change = 2
     if messages >= 100 and level < 3:
-        user.execute("UPDATE USER set Level = 3 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 3 where ID = ?", (str(id_),))
         change = 3
     if messages >= 200 and level < 4:
-        user.execute("UPDATE USER set Level = 4 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 4 where ID = ?", (str(id_),))
         change = 4
     if messages >= 500 and level < 5:
-        user.execute("UPDATE USER set Level = 5 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 5 where ID = ?", (str(id_),))
         change = 5
     if messages >= 1000 and level < 6:
-        user.execute("UPDATE USER set Level = 6 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 6 where ID = ?", (str(id_),))
         change = 6
     if messages >= 2000 and level < 7:
-        user.execute("UPDATE USER set Level = 7 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 7 where ID = ?", (str(id_),))
         change = 7
     if messages >= 5000 and level < 8:
-        user.execute("UPDATE USER set Level = 8 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 8 where ID = ?", (str(id_),))
         change = 8
     if messages >= 10000 and level < 9:
-        user.execute("UPDATE USER set Level = 9 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 9 where ID = ?", (str(id_),))
         change = 9
     if messages >= 100000 and level < 10:
-        user.execute("UPDATE USER set Level = 10 where ID = ?", (str(id_),))
-        user.commit()
+        cursor.execute("UPDATE USERS set Level = 10 where ID = ?", (str(id_),))
         change = 10
+    conn.commit()
+    cursor.close()
+    conn.close()
     return change
 
 
-def buy_background(user_id, code, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, Credits, Choice, bought from USER")
+def buy_background(user_id, code):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, Credits, Choice, bought from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
@@ -364,59 +499,76 @@ def buy_background(user_id, code, db_name='users.db'):
             new_credits = str(int(_credits) - 2000)
             bought = str(bought + ' 1')
             print(bought + ' ' + str(id_))
-            user.execute("UPDATE USER set bought = ? where ID = ?", (bought, str(id_)))
-            user.execute("UPDATE USER set credits = ? where ID = ?", (new_credits, str(id_)))
-            user.execute("UPDATE USER set choice = 1 where ID = ?", (str(id_)))
-            user.commit()
+            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 1 where ID = ?", (str(id_)))
+            conn.commit()
+            cursor.close()
+            conn.close()
         else:
             return _credits
     elif code == 2:
         if _credits >= 3000:
             new_credits = str(int(_credits) - 3000)
             bought = str(bought + ' 2')
-            user.execute("UPDATE USER set bought = ? where ID = ?", (bought, str(id_)))
-            user.execute("UPDATE USER set credits = ? where ID = ?", (new_credits, str(id_)))
-            user.execute("UPDATE USER set choice = 2 where ID = ?", (str(id_)))
-            user.commit()
+            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 2 where ID = ?", (str(id_)))
+            conn.commit()
+            cursor.close()
+            conn.close()
         else:
             return _credits
     elif code == 3:
         if _credits >= 3500:
             new_credits = str(int(_credits) - 3500)
             bought = str(bought + ' 3')
-            user.execute("UPDATE USER set bought = ? where ID = ?", (bought, str(id_)))
-            user.execute("UPDATE USER set credits = ? where ID = ?", (new_credits, str(id_)))
-            user.execute("UPDATE USER set choice = 3 where ID = ?", (str(id_)))
-            user.commit()
+            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 3 where ID = ?", (str(id_)))
+            conn.commit()
+            cursor.close()
+            conn.close()
         else:
             return _credits
     elif code == 4:
         if _credits >= 4000:
             new_credits = str(int(_credits) - 4000)
             bought = str(bought + ' 4')
-            user.execute("UPDATE USER set bought = ? where ID = ?", (bought, str(id_)))
-            user.execute("UPDATE USER set credits = ? where ID = ?", (new_credits, str(id_)))
-            user.execute("UPDATE USER set choice = 4 where ID = ?", (str(id_)))
-            user.commit()
+            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 4 where ID = ?", (str(id_)))
+            conn.commit()
+            cursor.close()
+            conn.close()
         else:
             return _credits
     elif code == 5:
         if _credits >= 5000:
             new_credits = str(int(_credits) - 5000)
             bought = str(bought + ' 5')
-            user.execute("UPDATE USER set bought = ? where ID = ?", (bought, str(id_)))
-            user.execute("UPDATE USER set credits = ? where ID = ?", (new_credits, str(id_)))
-            user.execute("UPDATE USER set choice = 5 where ID = ?", (str(id_)))
-            user.commit()
+            cursor.execute("UPDATE USERS set bought = ? where ID = ?", (bought, str(id_)))
+            cursor.execute("UPDATE USERS set credits = ? where ID = ?", (new_credits, str(id_)))
+            cursor.execute("UPDATE USERS set choice = 5 where ID = ?", (str(id_)))
+            conn.commit()
+            cursor.close()
+            conn.close()
         else:
             return _credits
     else:
         return False
 
 
-def bought_(user_id, choice, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, bought from USER")
+def bought_(user_id, choice):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, bought from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             bought = row[2]
@@ -429,25 +581,41 @@ def bought_(user_id, choice, db_name='users.db'):
         return False
 
 
-def set_choice(user_id, choice, db_name='users.db'):
+def set_choice(user_id, choice):
     try:
-        user = sqlite3.connect(db_name)
-        cursor = user.execute("SELECT ID, UserID from USER")
+        conn = psycopg2.connect(
+            database=url.path[1:],
+            user=url.username,
+            password=url.password,
+            host=url.hostname,
+            port=url.port
+        )
+        cursor = conn.cursor()
+        cursor.execute("SELECT ID, UserID from USERS")
         for row in cursor:
             if str(row[1]) == str(user_id):
                 id_ = row[0]
             else:
                 pass
-        user.execute("UPDATE USER set Choice = ? where ID = ?", (str(choice), str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set Choice = ? where ID = ?", (str(choice), str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return True
     except:
         return False
 
 
-def unsubscribe(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, subscribed from USER")
+def unsubscribe(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, subscribed from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
@@ -455,24 +623,37 @@ def unsubscribe(user_id, db_name='users.db'):
         else:
             pass
     if subscribed != 0 or subscribed != 1:
-        user.execute("UPDATE USER set subscribed = ? where ID = ?", (str(1), str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(1), str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return True
     elif subscribed == 0:
-        user.execute("UPDATE USER set subscribed = ? where ID = ?", (str(1), str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(1), str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return True
     elif subscribed == 1:
         return False
     else:
-        user.execute("UPDATE USER set subscribed = ? where ID = ?", (str(1), str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(1), str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return True
 
 
-def subscribe(user_id, db_name='users.db'):
-    user = sqlite3.connect(db_name)
-    cursor = user.execute("SELECT ID, UserID, subscribed from USER")
+def subscribe(user_id):
+    conn = psycopg2.connect(
+        database=url.path[1:],
+        user=url.username,
+        password=url.password,
+        host=url.hostname,
+        port=url.port
+    )
+    cursor = conn.cursor()
+    cursor.execute("SELECT ID, UserID, subscribed from USERS")
     for row in cursor:
         if str(row[1]) == str(user_id):
             id_ = row[0]
@@ -480,36 +661,40 @@ def subscribe(user_id, db_name='users.db'):
         else:
             pass
     if subscribed != 0 or subscribed != 1:
-        user.execute("UPDATE USER set subscribed = ? where ID = ?", (str(0), str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(0), str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return True
     elif subscribed == 0:
-        user.execute("UPDATE USER set subscribed = ? where ID = ?", (str(0), str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(0), str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return True
     elif subscribed == 1:
         return False
     else:
-        user.execute("UPDATE USER set subscribed = ? where ID = ?", (str(0), str(id_)))
-        user.commit()
+        cursor.execute("UPDATE USERS set subscribed = ? where ID = ?", (str(0), str(id_)))
+        conn.commit()
+        cursor.close()
+        conn.close()
         return True
-
-
 
 
 # Add Data
-# add_user('name', 2345678765678)
+# add_user('name', 1)
 
 # Add Messages
 # add_messages(2345678765678)
 
 # Delete data
-# delete_data(2345678765678)
+# delete_data(1)
 
 
 # Print Data
 
-# string = get_data('users.db')
+# string = get_data()
 # if string == '':
 #     string = 'No data is in the table'
 # print(string)
