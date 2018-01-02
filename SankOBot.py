@@ -219,9 +219,31 @@ async def on_message(message):
 
 
 
+        # polling
 
-
-
+        if message.content.startswith('%ynpoll'):
+            try:
+                await client.delete_message(message)
+            except discord.Forbidden:
+                pass
+            poll_message = await client.send_message(message.channel, message.content[len("%ynpoll "):])
+            await client.add_reaction(poll_message, '👍')
+            await client.add_reaction(poll_message, '👎')
+        if message.content.startswith('%poll'):
+            await client.send_message(message.channel, "Give me the poll options, each in a different message. Enter x when finished. Make sure there are less than 10 options.")
+            reply = await client.wait_for_message(author=message.author)
+            var = 0
+            options = ""
+            while reply.content != 'x' and var < 10:
+                var += 1
+                options += str(var) + ". " + reply.content + "\n"
+                reply = await client.wait_for_message(author=message.author)
+            if var >= 10:
+                await client.send_message(message.channel, 'Too many options. Try again with `%poll`')
+            poll_message = await client.send_message(message.channel, message.content[len("%poll "):] + "\n\n" + options)
+            reactions = ['1⃣', '2⃣', '3⃣', '4⃣', '5⃣', '6⃣', '7⃣', '8⃣', '9⃣', '🔟']
+            for reaction in reactions[:var]:
+                await client.add_reaction(poll_message, reaction)
 
 
 
