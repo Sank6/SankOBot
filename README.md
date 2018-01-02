@@ -5,7 +5,7 @@ ___
 To make your own instance of SankOBot or use it as a selfbot, read the requirements, install them and enter the tokens.
 
 #### 1. Requirements
-- Python 3 (with the modules `time`, `random`, `asyncio`, `smtplib`, `requests`, `sqlite3`, `datetime`)
+- Python 3 (with the modules `time`, `random`, `asyncio`, `smtplib`, `requests`, `datetime`)
 - [Discord.py](https://pypi.python.org/pypi/discord.py/)
 - [PRAW (Reddit)](https://pypi.python.org/pypi/praw) (Also need a reddit developer account)
 - [PyDictionary](https://pypi.python.org/pypi/PyDictionary)
