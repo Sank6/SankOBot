@@ -827,7 +827,7 @@ text-align: center;">©SankOBot. All Rights Reserved</div>
                 await client.send_message(message.channel, msg)
 
             except Exception as e:
-                await client.send_message(message.channel, 'Unkown Error: ```python\n' + e + '```') 
+                await client.send_message(message.channel, 'Unkown Error: ```python\n' + str(e) + '```') 
 
         if message.content.startswith('%cmeme'):
             url_list = []
