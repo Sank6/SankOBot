@@ -824,7 +824,7 @@ text-align: center;">©SankOBot. All Rights Reserved</div>
                     url_list.append(url)
 
                 ran_num = random.randint(0, len(url_list))
-                await client.send_message(message.channel, msg)
+                await client.send_message(message.channel, url)
 
             except Exception as e:
                 await client.send_message(message.channel, 'Unkown Error: ```python\n' + str(e) + '```') 
