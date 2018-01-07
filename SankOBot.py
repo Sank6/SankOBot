@@ -826,8 +826,8 @@ text-align: center;">©SankOBot. All Rights Reserved</div>
                 ran_num = random.randint(0, len(url_list))
                 await client.send_message(message.channel, msg)
 
-            except:
-                await client.send_message(message.channel, 'Unkown Error!')
+            except as e:
+                await client.send_message(message.channel, 'Unkown Error: ```python\n' + e + '```') 
 
         if message.content.startswith('%cmeme'):
             url_list = []
