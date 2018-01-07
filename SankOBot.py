@@ -814,7 +814,7 @@ text-align: center;">©SankOBot. All Rights Reserved</div>
         if message.content.startswith('%meme'):
             url_list = []
             await client.send_typing(message.channel)
-            reddit = praw.Reddit(client_id=reddit_client_secret,
+            reddit = praw.Reddit(client_id=reddit_client_id,
                                  client_secret=reddit_client_secret,
                                  redirect_uri='http://localhost:8080',
                                  user_agent=reddit_user_agent)
@@ -832,6 +832,7 @@ text-align: center;">©SankOBot. All Rights Reserved</div>
         if message.content.startswith('%cmeme'):
             url_list = []
             await client.send_typing(message.channel)
+            loading_memes = await client.send_message(message.channel, 'Loading your memes...')
             reddit = praw.Reddit(client_id=reddit_client_id,
                                  client_secret=reddit_client_secret,
                                  redirect_uri='http://localhost:8080',
@@ -841,7 +842,7 @@ text-align: center;">©SankOBot. All Rights Reserved</div>
                     for submission in reddit.subreddit('dankmemes').hot(limit=10000):
                         url = submission.url
                         time.sleep(2)
-                        await client.send_message(message.channel, url)
+                        await client.edit_message(loading_memes, url)
 
             except:
                 try:
