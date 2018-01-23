@@ -1,5 +1,10 @@
 # SankOBot
 A multipurpose [discord](https://discordapp.com/) bot made on python. Add it [here](https://discordapp.com/oauth2/authorize?client_id=323538617882640387&scope=bot&permissions=201587825)!
+
+<a href="https://discordbots.org/bot/323538617882640387">
+  <img src="https://discordbots.org/api/widget/323538617882640387.svg" alt="Discord Bots" />
+</a>
+
 ___
 ## Make Your Own
 To make your own instance of SankOBot or use it as a selfbot, read the requirements, install them and enter the tokens.
