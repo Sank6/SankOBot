@@ -1,9 +1,8 @@
-# SankOBot
-A multipurpose [discord](https://discordapp.com/) bot made on python. Add it [here](https://discordapp.com/oauth2/authorize?client_id=323538617882640387&scope=bot&permissions=201587825)!
+**Note**: This bot is no longer maintained
 
-<a href="https://discordbots.org/bot/323538617882640387">
-  <img src="https://discordbots.org/api/widget/323538617882640387.svg" alt="Discord Bots" />
-</a>
+
+# SankOBot
+A multipurpose [discord](https://discordapp.com/) bot made on python.
 
 ___
 ## Make Your Own
@@ -26,5 +25,4 @@ Open the `SankOBot.py` file and enter these values on lines 22-30.
 - Google CSE developer key and cx
 - Reddit Client ID, Secret and User Agent
 
-___
-Made By `Guru Ankrad#0597`
+
